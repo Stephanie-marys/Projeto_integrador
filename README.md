@@ -37,7 +37,7 @@ Este projeto foi desenvolvido para a disciplina Programação para Web 1 e tem c
 
 ## 🔧 Alterações realizadas
 
--  Dashboard adicionado que inclui: tempo, pontuação e vidas.
+-  Dashboard adicionado que inclui: tempo, pontuação.
 
-- Novo movimento do player
+- Adicionei níveis.
 
