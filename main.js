@@ -48,8 +48,6 @@ class Game {
         this.score = 0;
         this.fontColor = 'black';
         this.time = 0;
-        // this.maxTime não estava declarado, adicionei de volta com valor de exemplo:
-        this.maxTime = 30000; // 30 segundos de jogo
         this.winningScore = 25;
         this.gameOver = false;
         this.lives = 5;
@@ -144,15 +142,31 @@ function updateHUD(score, time, lives) {
     const scoreElement = document.getElementById("score");
     const timeElement = document.getElementById("time");
     const livesElement = document.getElementById("lives");
-
+    // >>> Adicione este console.log para depurar <<<
+    console.log("Elemento #lives encontrado:", livesElement); 
+    console.log("Valor de 'lives':", lives);
     // Formata o tempo para uma casa decimal, como na sua imagem
     const formattedTime = time.toFixed(1); 
 
     if (scoreElement) scoreElement.innerText = "Pontuação: " + score;
     if (timeElement) timeElement.innerText = "Tempo: " + formattedTime;
-    // Repete o emoji de coração com base no número de vidas
-    if (livesElement) livesElement.innerText = "❤️".repeat(lives); 
+    
+    // Move a função aninhada para fora ou garante que seja chamada:
+
+    // function updateLives(lives) {
+    //     document.getElementById("lives").innerHTML =
+    //         '<img src="./heart.png" class="heart">'.repeat(lives);
+    // }
+
+    // Chamada da função para renderizar as vidas, ou use o código diretamente:
+    if (livesElement) {
+        livesElement.innerHTML = '<img src="./heart.png" class="heart">'.repeat(lives);
+    }else {
+        // Se o elemento não for encontrado, isso aparecerá no console
+        console.error("Erro: Elemento com ID 'lives' não foi encontrado no HTML!");
+    }
 }
+
 
 // Evento que garante que todos os assets da página foram carregados antes de iniciar o jogo
 window.addEventListener('load', () => {
