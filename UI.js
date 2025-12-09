@@ -7,7 +7,7 @@ export class UI {
         this.livesImage = document.getElementById('lives'); 
     }
     
-    // O método draw AGORA SÓ DEVE CUIDAR DA TELA DE GAME OVER
+    // O método draw AGORA DEVE CUIDAR DA TELA DE GAME OVER E DA MENSAGEM DE NÍVEL
     draw(ctx) {
         ctx.save();
         ctx.shadowOffsetX = 2;
@@ -29,9 +29,21 @@ export class UI {
                 ctx.font = this.fontSize * 0.7 + 'px ' + this.fontFamily;
                 ctx.fillText('Melhor sorte na próxima', this.game.width * 0.5, this.game.height * 0.5 + 20);
             }
+        } 
+        
+        // --- ADIÇÃO CORRIGIDA: Lógica da mensagem de nível (Fora do bloco 'gameOver') ---
+        // Isso garante que a mensagem apareça DURANTE o jogo, não apenas no Game Over.
+        if (this.game.levelUpMessage) {
+            ctx.save(); // Salva o estado do canvas para o estilo específico da mensagem
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = '50px Arial';
+            // Desenha o texto da mensagem no meio da tela (corrigido para usar 'ctx')
+            ctx.fillText(this.game.levelUpMessage.text, this.game.width * 0.5, this.game.height * 0.4);
+            ctx.restore(); // Restaura o estado anterior do canvas
         }
+        // --- FIM DA ADIÇÃO CORRIGIDA ---
+
         ctx.restore();
     }
 }
-
-
