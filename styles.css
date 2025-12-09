@@ -7,38 +7,33 @@
 }
 #player,#layer1,#layer2,#layer3,#layer4,#layer5,#enemy_fly,#enemy_plant,#enemy_spider,#fire,#collisionAnimation,#lives{display:none}
 
-#dashboard {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  padding: 10px;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  font-size: 20px;
-  border-radius: 8px;
-}
-
-
-
-.hud-container {
-    display: flex;      
-    justify-content: flex-start; 
-    align-items: center; 
-    gap: 20px;           
+#game-dashboard {
+    /* Estilo do painel principal */
+    display: flex; /* Habilita o Flexbox */
+    justify-content: space-between; /* Espaça os itens uniformemente */
+    align-items: center; /* Alinha verticalmente os itens no centro */
     
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(100, 100, 100, 0.8);
-    padding: 10px 20px;
-    border-radius: 10px;
-    color: white;
+    /* Posição e aparência */
+    position: absolute; /* Posiciona sobre o canvas */
+    top: 10px; /* Distância do topo */
+    left: 10px; /* Distância da esquerda */
+    right: 10px; /* Distância da direita */
+    background-color: rgba(128, 128, 128, 0.8); /* Fundo semi-transparente */
+    padding: 10px 20px; /* Espaçamento interno */
+    border-radius: 5px; /* Cantos arredondados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    color: black;
     font-family: sans-serif;
-    font-size: 20px;
+    z-index: 10; /* Garante que fique acima do canvas */
+    max-width: 400px; /* Limita a largura para ficar compacto, como na imagem original */
 }
 
-#lives {
-    
-    font-size: 24px;
-    line-height: 1; 
+/* Estilo para as imagens de coração */
+.heart {
+    width: 25px; /* Ajuste o tamanho conforme necessário */
+    height: auto;
+    margin-left: 5px; /* Espaçamento entre os corações */
 }
+
+
+
