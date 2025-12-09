@@ -20,13 +20,13 @@ import { checkLevelUp } from './level.js';
 window.addEventListener('load', () => {
     const canvas = document.getElementById('canvas1');
     const ctx = canvas.getContext('2d');
-    // Você precisará ter um elemento <div id="level-message"> no seu HTML para isso funcionar.
+ 
     const levelMessageDisplay = document.getElementById('level-message'); 
     canvas.width = 900;
     canvas.height = 500;
 
     class Game {
-        // ... (resto do constructor e métodos da classe Game) ...
+       
         constructor(width, height) {
             this.width = width;
             this.height = height;
@@ -84,7 +84,6 @@ window.addEventListener('load', () => {
         }
         update(deltaTime) {
             this.time += deltaTime;
-            // if (this.time > this.maxTime) this.gameOver = true; 
 
             this.background.update();
             this.player.update(this.input.keys, deltaTime);
@@ -108,7 +107,7 @@ window.addEventListener('load', () => {
             this.particles = this.particles.filter(p => !p.markedForDeletion);
             this.collisions = this.collisions.filter(c => !c.markedForDeletion);
 
-            // Código do temporizador da mensagem visual no Canvas (se você usa UI.js para desenhar isso)
+          
             if (this.levelUpMessage) {
                 this.levelUpMessage.timer -= deltaTime;
                 if (this.levelUpMessage.timer <= 0) {
@@ -133,29 +132,28 @@ window.addEventListener('load', () => {
 
          addScore(points) {
             this.score += points;
-            // Usando checkLevelUp do level.js
+    
             const messageText = checkLevelUp(this); 
             if (messageText) {
-                // Preenche a propriedade que a UI.js usa para desenhar no Canvas
+               
                 this.levelUpMessage = { text: messageText, timer: 3000 }; 
 
-                // *** Adição para manipular o DOM se você quiser essa abordagem também ***
                 if (levelMessageDisplay) {
                     levelMessageDisplay.textContent = messageText;
                     levelMessageDisplay.classList.add('visible');
-                    // Remover a classe 'visible' após 3 segundos (sincronizado com o timer do canvas)
+        
                     setTimeout(() => {
                          levelMessageDisplay.classList.remove('visible');
-                         levelMessageDisplay.textContent = ''; // Limpa o texto do DOM
+                         levelMessageDisplay.textContent = ''; 
                     }, 3000);
                 }
             }
         }
     }
 
-    // A FUNÇÃO updateHUD ADICIONADA AQUI (Para manipular elementos HTML DOM)
+    
     function updateHUD(score, time, lives, levelValue) {
-        // Certifique-se que você tem esses IDs no seu HTML:
+       
         const scoreElement = document.getElementById("score"); 
         const timeElement = document.getElementById("time");
         const levelElement = document.getElementById("level");
@@ -166,7 +164,6 @@ window.addEventListener('load', () => {
         if (timeElement) timeElement.innerText = "Tempo: " + formattedTime;
         if (levelElement) levelElement.innerText = "Nível: " + levelValue;
         
-        // Se você usa uma imagem de coração no HTML:
          
         const livesElement = document.getElementById("lives-container");
         if (livesElement) { livesElement.innerHTML = '<img src="./heart.png" class="heart">'.repeat(lives); }
@@ -183,7 +180,7 @@ window.addEventListener('load', () => {
         game.update(deltaTime);
         game.draw(ctx);
          
-        // Chamando a função updateHUD para sincronizar o DOM com o estado do jogo
+      
         updateHUD(game.score, game.time, game.lives, game.level);
 
         if (!game.gameOver) requestAnimationFrame(animate);
