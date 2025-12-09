@@ -7,60 +7,34 @@
 }
 #player,#layer1,#layer2,#layer3,#layer4,#layer5,#enemy_fly,#enemy_plant,#enemy_spider,#fire,#collisionAnimation,#lives{display:none}
 
+/* Estilo para o painel de informações do jogo (HUD) */
 #game-dashboard {
-    /* Estilo do painel principal */
-    display: flex; /* Habilita o Flexbox */
-    justify-content: space-between; /* Espaça os itens uniformemente */
-    align-items: center; /* Alinha verticalmente os itens no centro */
-    
-    /* Posição e aparência */
-    position: absolute; /* Posiciona sobre o canvas */
-    top: 10px; /* Distância do topo */
-    left: 10px; /* Distância da esquerda */
-    right: 10px; /* Distância da direita */
-    background-color: rgba(128, 128, 128, 0.8); /* Fundo semi-transparente */
-    padding: 10px 20px; /* Espaçamento interno */
-    border-radius: 5px; /* Cantos arredondados */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
-    color: black;
-    font-family: sans-serif;
-    z-index: 10; /* Garante que fique acima do canvas */
-    max-width: 400px; /* Limita a largura para ficar compacto, como na imagem original */
+  /* Posicionamento fixo no canto superior esquerdo */
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  
+  /* Estilo visual */
+  padding: 10px 20px;
+  background: rgba(100, 100, 100, 0.8);
+  color: white;
+  border-radius: 10px;
+  font-family: sans-serif;
+  font-size: 20px;
+
+  /* Layout interno dos itens da HUD */
+  display: flex;      
+  justify-content: flex-start; 
+  align-items: center; 
+  gap: 20px; /* Espaçamento entre Nível, Pontuação, Tempo e Vidas */
 }
 
-/* Estilo para as imagens de coração */
-.heart {
-    width: 25px; /* Ajuste o tamanho conforme necessário */
-    height: auto;
-    margin-left: 5px; /* Espaçamento entre os corações */
-}
 
-/* Estilo para o container dos botões de dificuldade */
-#difficulty-selection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    gap: 10px; /* Adiciona espaço entre os botões */
-    margin-top: 50px; /* Ajuste a posição vertical conforme necessário */
-}
 
-/* Estilo para todos os botões dentro do container */
-#difficulty-selection button {
-    /* >>> Fundo Cinza com Transparência (RGBA) <<< */
-    background-color: rgba(128, 128, 128, 0.7); /* Cinza com 70% de opacidade */
-    
-    color: black; /* Texto branco para melhor contraste */
-    border: 1px solid #ddd; /* Borda leve */
-    padding: 10px 20px; /* Espaçamento interno */
-    border-radius: 5px; /* Cantos arredondados */
-    cursor: pointer; /* Muda o cursor para a mãozinha */
-    font-size: 16px;
-    transition: background-color 0.3s ease; /* Transição suave na interação */
-}
 
-/* Estilo para quando o mouse passar por cima dos botões */
-#difficulty-selection button:hover {
-    background-color: rgba(128, 128, 128, 0.9); /* Um pouco menos transparente ao passar o mouse */
-}
+
+
+
+
+
 
