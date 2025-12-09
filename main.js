@@ -21,11 +21,17 @@ import {
 import { difficultySettings } from './level.js'; 
 
 
-// Variáveis globais para o loop de animação
+// Variáveis globais para o loop de animação e assets
 let game;
 let ctx;
 let canvas;
 let lastTime = 0;
+let assetsLoaded = false; // Flag para verificar se os assets carregaram
+
+// Array de IDs dos assets de imagem que devem ser carregados
+// Certifique-se que esses IDs batem com os IDs no seu index.html
+const assetIds = ['player', 'layer1', 'layer2', 'layer3', 'layer4', 'layer5', 'enemy_fly', 'enemy_plant', 'enemy_spider', 'fire', 'collisionAnimation', 'heart-asset'];
+
 
 class Game {
     constructor(width, height, difficulty = 'medium') {
@@ -47,11 +53,14 @@ class Game {
         this.input = new InputHandler(this);
         this.UI = new UI(this); 
 
-        // ... (resto do seu construtor, arrays, audio, etc.) ...
+        // Arrays para gerenciar objetos dinâmicos
         this.enemies = [];
         this.particles = [];
         this.collisions = [];
+
+        // Lógica de spawn de inimigos
         this.enemyTimer = 0;
+
         this.maxParticles = 200;
         this.debug = false; 
         this.score = 0;
@@ -63,12 +72,31 @@ class Game {
         // Configuração inicial do estado do player
         this.player.currentState = this.player.states;
         this.player.currentState.enter();
-        // ... (resto do seu construtor de áudio) ...
+
+        // Configuração de áudio (pré-carregamento e reprodução)
+        this.audio = {
+            boom: document.getElementById('boom_sfx'),
+            started: false,
+            start() {
+                if (this.started || !this.boom) return;
+                this.started = true;
+                this.boom.play().then(() => {
+                    this.boom.pause();
+                    this.boom.currentTime = 0;
+                }).catch(() => {});
+            },
+            playBoom() {
+                if (!this.boom) return;
+                const sfx = this.boom.cloneNode();
+                sfx.volume = 0.9;
+                sfx.play().catch(() => {});
+            }
+        };
     }
 
-    // ... (Métodos update(), draw(), addEnemy() da classe Game) ...
+    // Método de atualização chamado a cada frame
     update(deltaTime) {
-         this.time += deltaTime;
+        this.time += deltaTime;
         if (this.time > this.maxTime) this.gameOver = true; 
         this.background.update();
         this.player.update(this.input.keys, deltaTime); 
@@ -88,14 +116,21 @@ class Game {
         this.particles = this.particles.filter(p => !p.markedForDeletion);
         this.collisions = this.collisions.filter(c => !c.markedForDeletion);
     }
+    
+    // Método de desenho chamado a cada frame
     draw(context) {
-        this.background.draw(context);
-        this.player.draw(context);
-        this.enemies.forEach(e => e.draw(context));
-        this.particles.forEach(p => p.draw(context));
-        this.collisions.forEach(c => c.draw(context));
-        this.UI.draw(context);
+        // Apenas desenhe se os assets já tiverem sido carregados
+        if (assetsLoaded) { 
+            this.background.draw(context);
+            this.player.draw(context);
+            this.enemies.forEach(e => e.draw(context));
+            this.particles.forEach(p => p.draw(context));
+            this.collisions.forEach(c => c.draw(context));
+            this.UI.draw(context);
+        }
     }
+
+    // Adiciona um novo inimigo de forma procedural
     addEnemy() {
         if (this.speed > 0 && Math.random() < 0.5) this.enemies.push(new GroundEnemy(this));
         else if (this.speed > 0) this.enemies.push(new ClimbingEnemy(this));
@@ -104,7 +139,7 @@ class Game {
 }
 
 
-// Função para atualizar o HUD (mantida aqui ou movida para UI.js)
+// Função para atualizar os elementos HTML (DOM) da interface
 function updateHUD(score, time, lives) {
     const scoreElement = document.getElementById("score");
     const timeElement = document.getElementById("time");
@@ -134,19 +169,59 @@ function animate(timeStamp) {
     if (!game.gameOver) requestAnimationFrame(animate);
 }
 
+
 // ====================================================================
-// Listener que inicia o jogo quando o evento 'gameStart' é disparado do level.js
+// Gerenciamento de Inicialização e Assets
 // ====================================================================
 
+// Função para carregar assets
+function loadAssets(callback) {
+    let loadedCount = 0;
+    assetIds.forEach(id => {
+        const img = document.getElementById(id);
+        // Verifica se a imagem já está no cache ou se precisa carregar
+        if (img.complete) {
+            loadedCount++;
+        } else {
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === assetIds.length) {
+                    callback(); // Chama o callback quando tudo carregar
+                }
+            };
+            img.onerror = () => {
+                console.error(`Falha ao carregar asset: ${id}`);
+                loadedCount++; 
+                if (loadedCount === assetIds.length) {
+                    callback();
+                }
+            };
+        }
+    });
+
+    // Caso todos os assets já estivessem completos antes mesmo de adicionar listeners
+    if (loadedCount === assetIds.length) {
+        callback();
+    }
+}
+
+// Listener que inicia o jogo quando o evento 'gameStart' é disparado do level.js
 window.addEventListener('gameStart', (event) => {
     const { difficulty, canvas: c, context: ct } = event.detail;
     canvas = c;
     ctx = ct;
     
-    // Instancia o jogo com a dificuldade selecionada
-    game = new Game(canvas.width, canvas.height, difficulty);
-    
-    // Inicia o loop de animação
-    lastTime = 0;
-    requestAnimationFrame(animate);
+    // Espera os assets carregarem antes de instanciar o jogo e iniciar o loop
+    loadAssets(() => {
+        assetsLoaded = true; // Define a flag como true
+        console.log("Todos os assets carregados. Iniciando o jogo...");
+
+        // Instancia o jogo com a dificuldade selecionada
+        game = new Game(canvas.width, canvas.height, difficulty);
+        
+        // Inicia o loop de animação
+        lastTime = 0;
+        requestAnimationFrame(animate);
+    });
 });
+
