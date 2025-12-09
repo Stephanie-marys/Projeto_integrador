@@ -7,30 +7,46 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <!-- Assets esperados pelo código -->
-  <img id="player" src="player.png" alt="" />
-  <img id="layer1" src="layer-1.png" alt="" />
-  <img id="layer2" src="layer-2.png" alt="" />
-  <img id="layer3" src="layer-3.png" alt="" />
-  <img id="layer4" src="layer-4.png" alt="" />
-  <img id="layer5" src="layer-5.png" alt="" />
-  <img id="enemy_fly" src="enemy_fly.png" alt="" />
-  <img id="enemy_plant" src="enemy_plant.png" alt="" />
-  <img id="enemy_spider" src="enemy_spider_big.png" alt="" />
-  <img id="fire" src="fire.png" alt="" />
-  <img id="collisionAnimation" src="boom.png" alt="" />
-  <img id="lives" src="heart.png" alt="" />
+
+  <!-- Assets esperados pelo código (escondidos por padrão) -->
+  <img id="player" src="player.png" alt="" style="display: none;""")/>>
+  <img id="layer1" src="layer-1.png" alt="" style="display: none;""")/>>
+  <img id="layer2" src="layer-2.png" alt="" style="display: none;""")/>>
+  <img id="layer3" src="layer-3.png" alt="" style="display: none;""")/>>
+  <img id="layer4" src="layer-4.png" alt="" style="display: none;""")/>>
+  <img id="layer5" src="layer-5.png" alt="" style="display: none;""")/>>
+  <img id="enemy_fly" src="enemy_fly.png" alt="" style="display: none;""")/>>
+  <img id="enemy_plant" src="enemy_plant.png" alt="" style="display: none;""")/>>
+  <img id="enemy_spider" src="enemy_spider_big.png" alt="" style="display: none;""")/>>
+  <img id="fire" src="fire.png" alt="" style="display: none;""")/>>
+  <img id="collisionAnimation" src="boom.png" alt="" style="display: none;""")/>>
+  <!-- ID 'lives' alterado para 'heart-asset' para evitar conflito com a div do dashboard -->
+  <img id="heart-asset" src="heart.png" alt="" style="display: none;""")/>> 
   <audio id="boom_sfx" src="boom.wav" preload="auto"></audio>
 
-
-<div id="game-dashboard">
-    <div id="score">Pontuação: 0</div>
-    <div id="time">Tempo: 0.0</div>
-    <div id="lives"></div> <!-- As imagens do coração serão inseridas aqui -->
+<!-- Tela de seleção de dificuldade inicial -->
+<div id="difficulty-selection">
+    <button id="easyBtn" onclick="startGame('easy')">Fácil</button>
+    <button id="mediumBtn" onclick="startGame('medium')">Médio</button>
+    <button id="hardBtn" onclick="startGame('hard')">Difícil</button>
 </div>
 
-<canvas id="canvas1"></canvas>
+<!-- O Canvas do Jogo (escondido até o jogo começar) -->
+<canvas id="canvas1" style="display: none;"></canvas>
 
+<!-- O Dashboard (HUD) que o JavaScript irá atualizar (escondido inicialmente) -->
+<div id="game-dashboard" style="display: none;">
+    <div id="score">Pontuação: 0</div>
+    <div id="time">Tempo: 0.0</div>
+    <!-- Esta div #lives recebe as imagens dos corações via JS -->
+    <div id="lives"></div> 
+</div>
+
+<!-- Scripts principais com type="module" -->
 <script type="module" src="./main.js"></script>
+<!-- Mantive a referência ao level.js, caso queira refatorar depois, mas a lógica está no main.js agora -->
+<script type="module" src="./level.js"></script> 
+
 </body>
 </html>
+
