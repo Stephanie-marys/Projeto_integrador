@@ -1,50 +1,39 @@
-// level.js
+// level.js 
 
-// Configurações de dificuldade exportadas
-export const difficultySettings = {
-    easy: {
-        maxSpeed: 2,
-        enemyInterval: 1500,
-        lives: 10,
-        maxTime: 60000 
-    },
-    medium: {
-        maxSpeed: 4, 
-        enemyInterval: 1000,
-        lives: 5,
-        maxTime: 30000
-    },
-    hard: {
-        maxSpeed: 6,
-        enemyInterval: 500,
-        lives: 3,
-        maxTime: 15000 
+const xpThresholds = [
+    0,      // Índice 0 (não utilizado)
+    10,     // Para ir do Nível 1 para o 2
+    50,     // Para ir do Nível 2 para o 3
+    100,    // Para ir do Nível 3 para o 4
+    200,    // Para ir do Nível 4 para o 5
+    // ... adicione mais limites aqui
+];
+
+/**
+ * Função central para verificar e subir de nível o jogador.
+ * Usa um loop para garantir que todos os níveis sejam incrementados se houver XP suficiente.
+ * @returns {string|null} A mensagem do ÚLTIMO nível atingido, ou null.
+ */
+export function checkLevelUp(game) {
+    let levelUpOccurred = false;
+    let message = null;
+
+    // Loop que continua enquanto houver XP suficiente para o próximo nível
+    while (true) {
+        const nextLevelXP = xpThresholds[game.level];
+
+        // Se não houver um próximo limite definido OU o score for insuficiente, pare o loop.
+        if (!nextLevelXP || game.score < nextLevelXP) {
+            break; 
+        }
+        
+        // Se chegamos aqui, o jogador subiu de nível.
+        game.level++; 
+        levelUpOccurred = true;
+        message = `🎉 PARABÉNS! Você alcançou o Nível ${game.level}!`;
+        console.log(message);
     }
-};
 
-// Função que inicia o jogo. Ela será adicionada ao escopo global para o HTML onclick.
-function startGame(difficulty) {
-    // Esconde a seleção de dificuldade e mostra o canvas e o dashboard
-    document.getElementById('difficulty-selection').style.display = 'none';
-    document.getElementById('canvas1').style.display = 'block';
-    document.getElementById('game-dashboard').style.display = 'flex'; 
-
-    const canvas = document.getElementById('canvas1');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 1000; 
-    canvas.height = 500;
-
-    // Dispara um evento personalizado para notificar o main.js que é hora de iniciar o jogo.
-    const event = new CustomEvent('gameStart', { 
-        detail: { 
-            difficulty: difficulty,
-            canvas: canvas,
-            context: ctx
-        } 
-    });
-    window.dispatchEvent(event);
+    return levelUpOccurred ? message : null;
 }
-
-// Torna a função startGame acessível globalmente (para o HTML onclick="startGame(...)")
-window.startGame = startGame;
 
